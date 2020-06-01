@@ -1,0 +1,19 @@
+import requests
+from bs4 import BeautifulSoup
+
+link = "https://www.dizibox.pw/sitemap-tax-diziler.xml"
+kimlik = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'}
+istek = requests.get(link, headers=kimlik)
+soup = BeautifulSoup(istek.text, "html5lib")
+
+diziLinkler = {"diziAdi": [], "diziLinki": []}
+
+for dizi_adresleri in soup.findAll('loc'):
+    diziLinkler["diziLinki"].append(dizi_adresleri.text)
+    diziLinkler["diziAdi"].append(dizi_adresleri.text.split("/")[4])
+
+print(diziLinkler)
+print(diziLinkler["diziAdi"][0], diziLinkler["diziLinki"][0])
+
+for i in range(len(diziLinkler["diziAdi"])):
+    print(diziLinkler["diziAdi"][i], diziLinkler["diziLinki"][i])

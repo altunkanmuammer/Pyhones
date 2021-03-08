@@ -1,0 +1,34 @@
+
+import requests
+from bs4 import BeautifulSoup
+from random import choice
+
+class ornek(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowIcon(QIcon(":ddos.png"))
+
+def GetProxy():
+    url = 'https://www.sslproxies.org'
+    url = 'https://hidemy.name/tr/proxy-list/'
+    r = requests.get(url)
+  soup = BeautifulSoup(r.content, 'html.parser')
+    return {'https': choice(list(map(lambda x: x[0]+':'+x[1],list(zip(list(map(lambda x: x.text, soup.find_all('td')[::8])), (map(lambda x: x.text, soup.find_all('td')[1::8])))))))}
+
+def UseProxy(url):
+    while True:
+        try:
+            proxy = GetProxy()
+            r = requests.get(url,proxies=proxy,timeout=5)
+            if r.status_code == 200:
+                print('Çalışan proxy = ', proxy)
+                break
+        except:
+            print('Bu proxy denendi ancak çalışmıyor : ', proxy)
+            pass
+    return r
+
+url = 'https://www.instagram.com/muammer_altunkan'
+x = UseProxy(url)
+print (Kullandığınız için Teşekkürler.)
+print(x.text)
